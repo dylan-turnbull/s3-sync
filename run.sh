@@ -8,14 +8,23 @@ s3get () {
     result_code=$?
 
     if [[ $result_code != 0 ]]; then
-        echo "s3 sync failed"
-        continue
+      echo "###########"
+      echo "Error! s3 sync failed"
+      echo $result
+      echo "Result Code: ${result_code}"
+      echo "###########"
+      continue
     fi
 
     echo "finished downloading from s3"
 }
 
 s3get
+
+if [[ "${RUN_ONCE:-false}" = "true" ]]; then
+  exit $result_code
+fi
+
 while true; do
   s3get
   sleep ${INTERVAL}
